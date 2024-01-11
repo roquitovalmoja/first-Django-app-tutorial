@@ -1,0 +1,7 @@
+<h1>{{ question.question_text }}</h1>
+<uL>
+    <!-- question.choice_set.all() returns an iterable of Choice objects -->
+    {% for choice in question.choice_set.all %}
+        <li>{{ choice.choice_text }}</li>
+    {% endfor %
+</uL>
