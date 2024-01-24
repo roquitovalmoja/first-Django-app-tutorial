@@ -1,4 +1,7 @@
 <!-- Because of how the app_directories template loader works, you can refer to this template within Django as polls/index.html -->
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
 {% if latest_question_list %}
     <ul>
