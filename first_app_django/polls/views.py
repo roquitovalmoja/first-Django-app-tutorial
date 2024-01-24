@@ -1,3 +1,5 @@
+from typing import Any
+from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
@@ -5,6 +7,8 @@ from django.urls import reverse
 from django.views import generic
 
 from .models import Question, Choice
+
+from django.utils import timezone
 
 # Create your views here.
 # each view is responsible for doing one of two things:
@@ -58,15 +62,33 @@ class IndexViews(generic.ListView):
 
     def get_queryset(self):
         # Return the last five published questions.
-        return Question.objects.order_by("-pub_date")[:5]
+        # return Question.objects.order_by("-pub_date")[:5]
+        """
+        Return the last five published questions (not including those set to be published on the future)
+        """
+        return Question.objects.filter(pub_date__lte = timezone.now()).order_by("-pub_date")[:5]
+    
 
 class DetailView(generic.DetailView):
     model = Question
     template_name = "polls/detail.html"
 
+    # even though future questions have been excluded, users can still reach them if they know or guess the right url
+    def get_queryset(self):
+        """
+        Excludes any questions that aren't published yet
+        """
+        return Question.objects.filter(pub_date__lte = timezone.now())
+
 class ResultsView(generic.DetailView):
     model = Question
     template_name = "polls/results.html"
+
+    # def get_queryset(self):
+    #     """
+    #     Excludes any questions that aren't published yet
+    #     """
+    #     return Question.objects.filter(pub_date__lte = timezone.now())
 
 def vote(request, question_id):
     # return HttpResponse(f"You're voting on question {question_id}")
