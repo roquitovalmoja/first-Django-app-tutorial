@@ -55,8 +55,8 @@ ROOT_URLCONF = 'first_app_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [BASE_DIR / "templates"], # added templates directory at project root folder
+        'APP_DIRS': True, # True -> automatically looks for templates/ subdirectory in each of the INSTALLED_APPS
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
